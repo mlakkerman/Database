@@ -3,7 +3,7 @@ const router = new Router()
 const speakerController = require('../controllers/speakerController')
 const checkRole = require('../middleware/checkRoleMiddleware')
 
-router.post('/', speakerController.create) // checkRole('ADMIN'),
+router.post('/', checkRole('ADMIN'), speakerController.create)
 router.get('/', speakerController.getAll)
 
 module.exports = router
