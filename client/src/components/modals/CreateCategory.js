@@ -20,7 +20,7 @@ const CreateCategory = ({show, onHide}) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Добавить тип
+                    Добавление категории
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

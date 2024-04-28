@@ -20,14 +20,14 @@ export const fetchCategories = async () => {
     return data
 }
 
-export const createDevice = async (device) => {
-    const {data} = await $authHost.post('api/event', device)
+export const createEvent = async (event) => {
+    const {data} = await $authHost.post('api/event', event)
     return data
 }
 
-export const fetchDevices = async (typeId, categoryId, page, limit= 5) => {
+export const fetchEvents = async (categoryId, sponsorId, page, limit= 5) => {
     const {data} = await $host.get('api/event', {params: {
-            typeId, categoryId, page, limit
+            categoryId, sponsorId, page, limit
         }})
     return data
 }

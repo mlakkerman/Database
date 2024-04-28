@@ -2,19 +2,19 @@ import React, {useContext, useEffect, useState} from 'react';
 import Modal from "react-bootstrap/Modal";
 import {Button, Dropdown, Form, Row, Col} from "react-bootstrap";
 import {Context} from "../../index";
-import {createDevice, fetchCategories, fetchDevices, fetchTypes} from "../../http/eventAPI";
+import {createEvent, fetchCategories, fetchEvents, fetchTypes} from "../../http/eventAPI";
 import {observer} from "mobx-react-lite";
 
-const CreateDevice = observer(({show, onHide}) => {
-    const {device} = useContext(Context)
+const CreateEvent = observer(({show, onHide}) => {
+    const {event} = useContext(Context)
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
 
     useEffect(() => {
-        fetchTypes().then(data => device.setTypes(data))
-        fetchCategories().then(data => device.setCategories(data))
+        fetchTypes().then(data => event.setTypes(data))
+        fetchCategories().then(data => event.setCategories(data))
     }, [])
 
     const addInfo = () => {
@@ -31,15 +31,15 @@ const CreateDevice = observer(({show, onHide}) => {
         setFile(e.target.files[0])
     }
 
-    const addDevice = () => {
+    const addEvent = () => {
         const formData = new FormData()
         formData.append('name', name)
         formData.append('price', `${price}`)
         formData.append('img', file)
-        formData.append('categoryId', device.selectedCategory.id)
-        formData.append('typeId', device.selectedType.id)
+        formData.append('categoryId', event.selectedCategory.id)
+        formData.append('typeId', event.selectedType.id)
         formData.append('info', JSON.stringify(info))
-        createDevice(formData).then(data => onHide())
+        createEvent(formData).then(data => onHide())
     }
 
     return (
@@ -50,17 +50,17 @@ const CreateDevice = observer(({show, onHide}) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Добавить устройство
+                    Добавление мероприятия
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Dropdown className="mt-2 mb-2">
-                        <Dropdown.Toggle>{device.selectedType.name || "Выберите тип"}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{event.selectedType.name || "Выберите тип"}</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {device.types.map(type =>
+                            {event.types.map(type =>
                                 <Dropdown.Item
-                                    onClick={() => device.setSelectedType(type)}
+                                    onClick={() => event.setSelectedType(type)}
                                     key={type.id}
                                 >
                                     {type.name}
@@ -69,11 +69,11 @@ const CreateDevice = observer(({show, onHide}) => {
                         </Dropdown.Menu>
                     </Dropdown>
                     <Dropdown className="mt-2 mb-2">
-                        <Dropdown.Toggle>{device.selectedCategory.name || "Выберите тип"}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{event.selectedCategory.name || "Выберите тип"}</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {device.categories.map(category =>
+                            {event.categories.map(category =>
                                 <Dropdown.Item
-                                    onClick={() => device.setSelectedCategory(category)}
+                                    onClick={() => event.setSelectedCategory(category)}
                                     key={category.id}
                                 >
                                     {category.name}
@@ -136,10 +136,10 @@ const CreateDevice = observer(({show, onHide}) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-danger" onClick={onHide}>Закрыть</Button>
-                <Button variant="outline-success" onClick={addDevice}>Добавить</Button>
+                <Button variant="outline-success" onClick={addEvent}>Добавить</Button>
             </Modal.Footer>
         </Modal>
     );
 });
 
-export default CreateDevice;
+export default CreateEvent;

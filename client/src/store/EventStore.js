@@ -4,7 +4,7 @@ export default class EventStore {
     constructor() {
         this._types = []
         this._categories = []
-        this._devices = []
+        this._events = []
         this._selectedType = {}
         this._selectedCategory = {}
         this._page = 1
@@ -19,8 +19,8 @@ export default class EventStore {
     setCategories(categories) {
         this._categories = categories
     }
-    setDevices(devices) {
-        this._devices = devices
+    setEvents(events) {
+        this._events = events
     }
 
     setSelectedType(type) {
@@ -44,8 +44,8 @@ export default class EventStore {
     get categories() {
         return this._categories
     }
-    get devices() {
-        return this._devices
+    get events() {
+        return this._events
     }
     get selectedType() {
         return this._selectedType

@@ -7,27 +7,27 @@ import CategoryBar from "../components/CategoryBar";
 import DeviceList from "../components/DeviceList";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import {fetchCategories, fetchDevices, fetchTypes} from "../http/eventAPI";
+import {fetchCategories, fetchDevices, fetchEvents, fetchTypes} from "../http/eventAPI";
 import Pages from "../components/Pages";
 
 const Shop = observer(() => {
-    const {device} = useContext(Context)
+    const {event} = useContext(Context)
 
     useEffect(() => {
-        fetchTypes().then(data => device.setTypes(data))
-        fetchCategories().then(data => device.setCategories(data))
-        fetchDevices(null, null, 1, 2).then(data => {
-            device.setDevices(data.rows)
-            device.setTotalCount(data.count)
+        fetchTypes().then(data => event.setTypes(data))
+        fetchCategories().then(data => event.setCategories(data))
+        fetchEvents(null, null, 1, 2).then(data => {
+            event.setEvents(data.rows)
+            event.setTotalCount(data.count)
         })
     }, [])
 
     useEffect(() => {
-        fetchDevices(device.selectedType.id, device.selectedCategory.id, device.page, 2).then(data => {
-            device.setDevices(data.rows)
-            device.setTotalCount(data.count)
+        fetchEvents(event.selectedType.id, event.selectedCategory.id, event.page, 2).then(data => {
+            event.setEvents(data.rows)
+            event.setTotalCount(data.count)
         })
-    }, [device.page, device.selectedType, device.selectedCategory,])
+    }, [event.page, event.selectedType, event.selectedCategory,])
 
     return (
         <Container>
