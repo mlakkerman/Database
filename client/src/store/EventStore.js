@@ -2,10 +2,10 @@ import {makeAutoObservable} from "mobx";
 
 export default class EventStore {
     constructor() {
-        this._types = []
+        this._sponsors = []
         this._categories = []
         this._events = []
-        this._selectedType = {}
+        this._selectedSponsor = {}
         this._selectedCategory = {}
         this._page = 1
         this._totalCount = 0
@@ -13,8 +13,8 @@ export default class EventStore {
         makeAutoObservable(this)
     }
 
-    setTypes(types) {
-        this._types = types
+    setSponsors(sponsors) {
+        this._sponsors = sponsors
     }
     setCategories(categories) {
         this._categories = categories
@@ -23,9 +23,9 @@ export default class EventStore {
         this._events = events
     }
 
-    setSelectedType(type) {
+    setSelectedSponsor(sponsor) {
         this.setPage(1)
-        this._selectedType = type
+        this._selectedSponsor = sponsor
     }
     setSelectedCategory(category) {
         this.setPage(1)
@@ -38,8 +38,8 @@ export default class EventStore {
         this._totalCount = count
     }
 
-    get types() {
-        return this._types
+    get sponsors() {
+        return this._sponsors
     }
     get categories() {
         return this._categories
@@ -47,8 +47,8 @@ export default class EventStore {
     get events() {
         return this._events
     }
-    get selectedType() {
-        return this._selectedType
+    get selectedSponsor() {
+        return this._selectedSponsor
     }
     get selectedCategory() {
         return this._selectedCategory

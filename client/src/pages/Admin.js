@@ -1,22 +1,22 @@
 import React, {useState} from 'react';
 import {Button, Container} from "react-bootstrap";
 import CreateCategory from "../components/modals/CreateCategory";
-import CreateDevice from "../components/modals/CreateDevice";
-import CreateType from "../components/modals/CreateType";
+import CreateEvent from "../components/modals/CreateEvent";
+import CreateSponsor from "../components/modals/CreateSponsor";
 
 const Admin = () => {
     const [categoryVisible, setCategoryVisible] = useState(false)
-    const [typeVisible, setTypeVisible] = useState(false)
-    const [deviceVisible, setDeviceVisible] = useState(false)
+    const [sponsorVisible, setSponsorVisible] = useState(false)
+    const [eventVisible, setEventVisible] = useState(false)
 
     return (
         <Container className="d-flex flex-column">
             <Button
                 variant={"outline-dark"}
                 className="mt-4 p-2"
-                onClick={() => setTypeVisible(true)}
+                onClick={() => setSponsorVisible(true)}
             >
-                Добавить тип
+                Добавить спонсора
             </Button>
             <Button
                 variant={"outline-dark"}
@@ -28,13 +28,13 @@ const Admin = () => {
             <Button
                 variant={"outline-dark"}
                 className="mt-4 p-2"
-                onClick={() => setDeviceVisible(true)}
+                onClick={() => setEventVisible(true)}
             >
-                Добавить устройство
+                Добавить мероприятие
             </Button>
             <CreateCategory show={categoryVisible} onHide={() => setCategoryVisible(false)}/>
-            <CreateDevice show={deviceVisible} onHide={() => setDeviceVisible(false)}/>
-            <CreateType show={typeVisible} onHide={() => setTypeVisible(false)}/>
+            <CreateEvent show={eventVisible} onHide={() => setEventVisible(false)}/>
+            <CreateSponsor show={sponsorVisible} onHide={() => setSponsorVisible(false)}/>
         </Container>
     );
 };

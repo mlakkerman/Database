@@ -2,18 +2,19 @@ import React, {useContext, useEffect, useState} from 'react';
 import Modal from "react-bootstrap/Modal";
 import {Button, Dropdown, Form, Row, Col} from "react-bootstrap";
 import {Context} from "../../index";
-import {createEvent, fetchCategories, fetchEvents, fetchTypes} from "../../http/eventAPI";
+import {createEvent, fetchCategories, fetchEvents, fetchSponsors} from "../../http/eventAPI";
 import {observer} from "mobx-react-lite";
 
 const CreateEvent = observer(({show, onHide}) => {
     const {event} = useContext(Context)
-    const [name, setName] = useState('')
-    const [price, setPrice] = useState(0)
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
+    const [date, setDate] = useState('')
 
     useEffect(() => {
-        fetchTypes().then(data => event.setTypes(data))
+        fetchSponsors().then(data => event.setSponsors(data))
         fetchCategories().then(data => event.setCategories(data))
     }, [])
 
@@ -33,11 +34,12 @@ const CreateEvent = observer(({show, onHide}) => {
 
     const addEvent = () => {
         const formData = new FormData()
-        formData.append('name', name)
-        formData.append('price', `${price}`)
+        formData.append('title', title)
+        formData.append('description', description)
         formData.append('img', file)
+        formData.append('date', date)
         formData.append('categoryId', event.selectedCategory.id)
-        formData.append('typeId', event.selectedType.id)
+        formData.append('sponsorId', event.selectedSponsor.id)
         formData.append('info', JSON.stringify(info))
         createEvent(formData).then(data => onHide())
     }
@@ -56,20 +58,20 @@ const CreateEvent = observer(({show, onHide}) => {
             <Modal.Body>
                 <Form>
                     <Dropdown className="mt-2 mb-2">
-                        <Dropdown.Toggle>{event.selectedType.name || "Выберите тип"}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{event.selectedSponsor.name || "Выберите спонсора"}</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {event.types.map(type =>
+                            {event.sponsors.map(sponsor =>
                                 <Dropdown.Item
-                                    onClick={() => event.setSelectedType(type)}
-                                    key={type.id}
+                                    onClick={() => event.setSelectedSponsor(sponsor)}
+                                    key={sponsor.id}
                                 >
-                                    {type.name}
+                                    {sponsor.name}
                                 </Dropdown.Item>
                             )}
                         </Dropdown.Menu>
                     </Dropdown>
                     <Dropdown className="mt-2 mb-2">
-                        <Dropdown.Toggle>{event.selectedCategory.name || "Выберите тип"}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{event.selectedCategory.name || "Выберите категорию МП"}</Dropdown.Toggle>
                         <Dropdown.Menu>
                             {event.categories.map(category =>
                                 <Dropdown.Item
@@ -82,23 +84,28 @@ const CreateEvent = observer(({show, onHide}) => {
                         </Dropdown.Menu>
                     </Dropdown>
                     <Form.Control
-                        value={name}
-                        onChange={e => setName(e.target.value)}
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
                         className="mt-3"
-                        placeholder="Введите название устройства"
+                        placeholder="Введите название мероприятия"
                     />
                     <Form.Control
-                        value={price}
-                        onChange={e => setPrice(Number(e.target.value))}
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
                         className="mt-3"
-                        placeholder="Введите стоимость устройства"
-                        type="number"
+                        placeholder="Введите описание мероприятия"
                     />
                     <Form.Control
                         className="mt-3"
                         type="file"
                         onChange={selectFile}
                     />
+                    <Form.Control
+                      className="mt-3"
+                      type="datetime-local"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                  />
                     <hr/>
                     <Button
                         variant={"outline-dark"}

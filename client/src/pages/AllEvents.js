@@ -2,35 +2,38 @@ import React, {useContext, useEffect} from 'react';
 import {Container} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import TypeBar from "../components/TypeBar";
+import TypeBar from "../components/SponsorBar";
 import CategoryBar from "../components/CategoryBar";
-import DeviceList from "../components/DeviceList";
+import DeviceList from "../components/EventList";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import {fetchCategories, fetchDevices, fetchEvents, fetchTypes} from "../http/eventAPI";
+import {fetchCategories, fetchEvents, fetchSponsors} from "../http/eventAPI";
 import Pages from "../components/Pages";
 
 const Shop = observer(() => {
     const {event} = useContext(Context)
 
     useEffect(() => {
-        fetchTypes().then(data => event.setTypes(data))
+        fetchSponsors().then(data => event.setSponsors(data))
         fetchCategories().then(data => event.setCategories(data))
-        fetchEvents(null, null, 1, 2).then(data => {
+        fetchEvents(null, null, 1, 5).then(data => {
             event.setEvents(data.rows)
             event.setTotalCount(data.count)
         })
     }, [])
 
     useEffect(() => {
-        fetchEvents(event.selectedType.id, event.selectedCategory.id, event.page, 2).then(data => {
+        fetchEvents(event.selectedCategory.id, event.selectedSponsor.id, event.page, 3).then(data => {
             event.setEvents(data.rows)
             event.setTotalCount(data.count)
         })
-    }, [event.page, event.selectedType, event.selectedCategory,])
+    }, [event.page, event.selectedSponsor, event.selectedCategory,])
 
     return (
         <Container>
+            <Row className="mr-auto">
+            </Row>  
+                
             <Row className="mt-2">
                 <Col md={3}>
                     <TypeBar/>

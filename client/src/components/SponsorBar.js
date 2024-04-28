@@ -1,25 +1,24 @@
 import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 
-const TypeBar = observer(() => {
+const SponsorBar = observer(() => {
     const {event} = useContext(Context)
     return (
         <ListGroup>
-            {event.types.map(type =>
+            {event.sponsors.map(sponsor =>
                 <ListGroup.Item
                     style={{cursor: 'pointer'}}
-                    active={type.id === event.selectedType.id}
-                    onClick={() => event.setSelectedType(type)}
-                    key={type.id}
+                    active={sponsor.id === event.selectedSponsor.id}
+                    onClick={() => event.setSelectedSponsor(sponsor)}
+                    key={sponsor.id}
                 >
-                    {type.name}
+                    {sponsor.name}
                 </ListGroup.Item>
             )}
         </ListGroup>
     );
 });
 
-export default TypeBar;
+export default SponsorBar;
