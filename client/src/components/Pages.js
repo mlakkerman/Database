@@ -7,11 +7,9 @@ const Pages = observer(() => {
     const {event} = useContext(Context)
     const pageCount = Math.ceil(event.totalCount / event.limit)
     const pages = []
-
     for (let i = 0; i < pageCount; i++) {
         pages.push(i + 1)
     }
-    console.log('Страницы:', pages, 'Общее количество:', event.totalCount, 'Лимит:', event.limit); // это помогает отладить код
     return (
         <Pagination className="mt-3">
             {pages.map(page =>

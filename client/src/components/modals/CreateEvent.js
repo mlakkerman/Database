@@ -1,17 +1,19 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from "react-bootstrap/Modal";
-import {Button, Dropdown, Form, Row, Col} from "react-bootstrap";
-import {Context} from "../../index";
-import {createEvent, fetchCategories, fetchEvents, fetchSponsors} from "../../http/eventAPI";
-import {observer} from "mobx-react-lite";
+import Alert from "react-bootstrap/Alert";
+import { Button, Dropdown, Form, Row, Col } from "react-bootstrap";
+import { Context } from "../../index";
+import { createEvent, fetchCategories, fetchEvents, fetchSponsors } from "../../http/eventAPI";
+import { observer } from "mobx-react-lite";
 
-const CreateEvent = observer(({show, onHide}) => {
-    const {event} = useContext(Context)
+const CreateEvent = observer(({ show, onHide }) => {
+    const { event } = useContext(Context)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
     const [date, setDate] = useState('')
+    const [error, setError] = useState('');
 
     useEffect(() => {
         fetchSponsors().then(data => event.setSponsors(data))
@@ -19,13 +21,13 @@ const CreateEvent = observer(({show, onHide}) => {
     }, [])
 
     const addInfo = () => {
-        setInfo([...info, {title: '', description: '', number: Date.now()}])
+        setInfo([...info, { title: '', description: '', number: Date.now() }])
     }
     const removeInfo = (number) => {
         setInfo(info.filter(i => i.number !== number))
     }
     const changeInfo = (key, value, number) => {
-        setInfo(info.map(i => i.number === number ? {...i, [key]: value} : i))
+        setInfo(info.map(i => i.number === number ? { ...i, [key]: value } : i))
     }
 
     const selectFile = e => {
@@ -33,6 +35,13 @@ const CreateEvent = observer(({show, onHide}) => {
     }
 
     const addEvent = () => {
+        const chosenDate = new Date(date);
+        const presentDate = new Date();
+
+        if (chosenDate < presentDate) {
+            setError('Дата мероприятия не может находиться в прошлом.');
+            return;
+        }
         const formData = new FormData()
         formData.append('title', title)
         formData.append('description', description)
@@ -101,12 +110,13 @@ const CreateEvent = observer(({show, onHide}) => {
                         onChange={selectFile}
                     />
                     <Form.Control
-                      className="mt-3"
-                      type="datetime-local"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                  />
-                    <hr/>
+                        className="mt-3"
+                        type="datetime-local"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
+                    {error && <Alert className="mt-3" variant="danger">{error}</Alert>}
+                    <hr />
                     <Button
                         variant={"outline-dark"}
                         onClick={addInfo}

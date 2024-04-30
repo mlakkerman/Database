@@ -38,3 +38,8 @@ export const fetchOneEvent = async (id) => {
     const { data } = await $host.get('api/event/' + id)
     return data
 }
+
+export const deleteEventFromAPI = async (id) => {
+    const { data } = await $authHost.delete(`api/event/${id}`)
+    return data
+}

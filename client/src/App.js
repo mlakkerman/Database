@@ -6,6 +6,7 @@ import {observer} from "mobx-react-lite";
 import {Context} from "./index";
 import {check} from "./http/userAPI";
 import {Spinner} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import "./App.css"
 
 const App = observer(() => {
@@ -20,7 +21,12 @@ const App = observer(() => {
     }, [])
 
     if (loading) {
-        return <Spinner animation={"grow"}/>
+        return (
+            <Container className="d-flex justify-content-center align-items-center" 
+                       style={{height: '100vh'}}>
+                 <Spinner animation={"border"}/>
+            </Container>
+        )
     }
 
     return (

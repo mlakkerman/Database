@@ -18,9 +18,9 @@ const NavBar = observer(() => {
     }
 
     return (
-        <Navbar bg="dark" variant="dark">
+        <Navbar bg="dark" variant="dark" className="p-3">
             <Container className="d-flex justify-content-between">
-                <NavLink style={{color:'white', textDecoration: 'none'}} to={ALLEVENTS_ROUTE}>EventMaster</NavLink>
+                <NavLink style={{color:'white', fontSize: 20, textDecoration: 'none'}} to={ALLEVENTS_ROUTE}>EventMaster</NavLink>
                 {user.isAuth ?
                     <Nav className="ml-auto" style={{color: 'white'}}>
                         <Button

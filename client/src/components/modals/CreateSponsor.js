@@ -33,7 +33,7 @@ const CreateSponsor = ({show, onHide}) => {
                     <Form.Control
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        placeholder={"Введите название спонсора"}
+                        placeholder={"Введите название организатора"}
                     />
                     <Form.Control
                         className="mt-3"
@@ -44,7 +44,7 @@ const CreateSponsor = ({show, onHide}) => {
                     className="mt-3"
                         value={url}
                         onChange={e => setUrl(e.target.value)}
-                        placeholder={"Введите название спонсора"}
+                        placeholder={"Введите URL ссылку на сайт организации"}
                     />
                 </Form>
             </Modal.Body>

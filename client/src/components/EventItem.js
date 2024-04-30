@@ -1,25 +1,36 @@
-import React from 'react';
-import {Card, Col} from "react-bootstrap";
+import React, { useContext } from 'react';
+import { Card, Col } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import star from '../assets/star.png'
-import {useHistory} from "react-router-dom"
-import {EVENT_ROUTE} from "../utils/consts";
+import { useHistory } from "react-router-dom"
+import { EVENT_ROUTE } from "../utils/consts";
 import { BsCalendar2Week } from "react-icons/bs";
+import { MdOutlineStarOutline } from "react-icons/md";
+import { IoTrashOutline } from "react-icons/io5";
 
-
-const EventItem = ({event}) => {
+const EventItem = ({ event, deleteEvent }) => {
     const history = useHistory()
+    const deleteCardEvent = async (e) => {
+        e.stopPropagation();
+        try {
+            await deleteEvent(event.id);
+        } catch (error) {
+            console.log('Ошибка при удалении мероприятия: ', error);
+        }
+    };
     return (
         <Col md={3} className={"mt-3"} onClick={() => history.push(EVENT_ROUTE + '/' + event.id)}>
-            <Card style={{width: 150, cursor: 'pointer'}} border={"light"}>
-                <Image width={150} height={150} src={process.env.REACT_APP_API_URL + event.img}/>
+            <Card style={{ width: 200, cursor: 'pointer' }} border={"light"}>
+                <Image width={200} height={200} src={process.env.REACT_APP_API_URL + event.img} />
                 <div className="text-black-50 mt-1 d-flex justify-content-between align-items-center">
                     <div>{event.title}</div>
                     <div className="d-flex align-items-center">
-                        <Image width={18} height={18} src={star}/>
+                        <MdOutlineStarOutline size={22} />
                     </div>
                 </div>
-                <div> <BsCalendar2Week width={16} height={16} /> {new Date(event.date).toLocaleString()}</div>
+                <div className="text-black-50 mt-1 d-flex justify-content-between align-items-center">
+                    <div style={{ fontSize: 12 }}> <BsCalendar2Week size={12} /> {new Date(event.date).toLocaleString()}</div>
+                    <IoTrashOutline size={22} onClick={deleteCardEvent} />
+                </div>
             </Card>
         </Col>
     );
