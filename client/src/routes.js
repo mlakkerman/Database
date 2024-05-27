@@ -2,7 +2,7 @@ import Admin from "./pages/Admin";
 import {ADMIN_ROUTE, EVENT_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, ALLEVENTS_ROUTE} from "./utils/consts";
 import AllEvents from "./pages/AllEvents";
 import Auth from "./pages/Auth";
-import EventsPage from "./pages/EventsPage";
+import EventPage from "./pages/EventPage";
 
 export const authRoutes = [
     {
@@ -26,6 +26,6 @@ export const publicRoutes = [
     },
     {
         path: EVENT_ROUTE + '/:id',
-        Component: EventsPage
+        Component: EventPage
     },
 ]

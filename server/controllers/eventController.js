@@ -32,7 +32,7 @@ class EventController {
     async getAll(req, res) {
         let { categoryId, addressId, sponsorId, speakerId, limit, page } = req.query
         page = page || 1
-        limit = limit || 9
+        limit = limit || 8
         let offset = page * limit - limit
         let whereClause = {};
         if (categoryId) whereClause.categoryId = categoryId;
@@ -59,6 +59,22 @@ class EventController {
         )
         return res.json(event)
     }
+
+    async delete(req, res, next) {
+        try {
+            const { id } = req.params
+            const event = await Events.findOne({ where: { id } })
+            if(!event){
+                return next(ApiError.badRequest('Event Not Found'))
+            }
+    
+            await event.destroy()
+            return res.json({ message: "Event deleted successfully" })
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+    }
+    
 }
 
 module.exports = new EventController()
