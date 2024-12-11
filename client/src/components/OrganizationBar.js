@@ -3,22 +3,22 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import ListGroup from "react-bootstrap/ListGroup";
 
-const SponsorBar = observer(() => {
+const OrganizationBar = observer(() => {
     const {event} = useContext(Context)
     return (
         <ListGroup>
-            {event.sponsors.map(sponsor =>
+            {event.organizations.map(organization =>
                 <ListGroup.Item
                     style={{cursor: 'pointer'}}
-                    active={sponsor.id === event.selectedSponsor.id}
-                    onClick={() => event.setSelectedSponsor(sponsor)}
-                    key={sponsor.id}
+                    active={organization.id === event.selectedOrganization.id}
+                    onClick={() => event.setSelectedOrganization(organization)}
+                    key={organization.id}
                 >
-                    {sponsor.name}
+                    {organization.name}
                 </ListGroup.Item>
             )}
         </ListGroup>
     );
 });
 
-export default SponsorBar;
+export default OrganizationBar;

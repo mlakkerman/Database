@@ -6,8 +6,10 @@ import { EVENT_ROUTE } from "../utils/consts";
 import { BsCalendar2Week } from "react-icons/bs";
 import { MdOutlineStarOutline } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
+import { Context } from '../index';
 
-const EventItem = ({ event, deleteEvent }) => {
+const EventItem = ({ event, deleteEvent }) => { 
+    const {user} = useContext(Context)
     const history = useHistory()
     const deleteCardEvent = async (e) => {
         e.stopPropagation();
@@ -29,7 +31,7 @@ const EventItem = ({ event, deleteEvent }) => {
                 </div>
                 <div className="text-black-50 mt-1 d-flex justify-content-between align-items-center">
                     <div style={{ fontSize: 12 }}> <BsCalendar2Week size={12} /> {new Date(event.date).toLocaleString()}</div>
-                    <IoTrashOutline size={22} onClick={deleteCardEvent} />
+                    {user.user.role === 'ADMIN' &&<IoTrashOutline size={22} onClick={deleteCardEvent} />}
                 </div>
             </Card>
         </Col>

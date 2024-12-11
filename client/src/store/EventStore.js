@@ -1,12 +1,11 @@
 import { makeAutoObservable } from "mobx";
-import { deleteEventFromAPI } from "../http/eventAPI";
-import { fetchEvents } from "../http/eventAPI";
+import { deleteEventFromAPI, fetchEvents } from "../http/eventAPI";
 export default class EventStore {
     constructor() {
-        this._sponsors = []
+        this._organizations = []
         this._categories = []
         this._events = []
-        this._selectedSponsor = {}
+        this._selectedOrganization = {}
         this._selectedCategory = {}
         this._page = 1
         this._totalCount = 0
@@ -14,8 +13,8 @@ export default class EventStore {
         makeAutoObservable(this)
     }
 
-    setSponsors(sponsors) {
-        this._sponsors = sponsors
+    setOrganizations(organizations) {
+        this._organizations = organizations
     }
     setCategories(categories) {
         this._categories = categories
@@ -39,12 +38,12 @@ export default class EventStore {
     };
 
 
-    setSelectedSponsor(sponsor) {
+    setSelectedOrganization(organization) {
         this.setPage(1)
-        if (this._selectedSponsor === sponsor) {
-            this._selectedSponsor = {}
+        if (this._selectedOrganization === organization) {
+            this._selectedOrganization = {}
         } else {
-            this._selectedSponsor = sponsor
+            this._selectedOrganization = organization
         }
     }
     setSelectedCategory(category) {
@@ -55,6 +54,10 @@ export default class EventStore {
             this._selectedCategory = category
         }
     }
+    resetSelectedEntities() {
+        this._selectedOrganization = {};
+        this._selectedCategory = {};
+    }
     setPage(page) {
         this._page = page
     }
@@ -62,8 +65,8 @@ export default class EventStore {
         this._totalCount = count
     }
 
-    get sponsors() {
-        return this._sponsors
+    get organizations() {
+        return this._organizations
     }
     get categories() {
         return this._categories
@@ -71,8 +74,8 @@ export default class EventStore {
     get events() {
         return this._events
     }
-    get selectedSponsor() {
-        return this._selectedSponsor
+    get selectedOrganization() {
+        return this._selectedOrganization
     }
     get selectedCategory() {
         return this._selectedCategory
@@ -86,4 +89,5 @@ export default class EventStore {
     get limit() {
         return this._limit
     }
+    
 }

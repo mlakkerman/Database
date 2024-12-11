@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {Button, Container} from "react-bootstrap";
 import CreateCategory from "../components/modals/CreateCategory";
 import CreateEvent from "../components/modals/CreateEvent";
-import CreateSponsor from "../components/modals/CreateSponsor";
+import CreateOrganization from "../components/modals/CreateOrganization";
 
 const Admin = () => {
     const [categoryVisible, setCategoryVisible] = useState(false)
-    const [sponsorVisible, setSponsorVisible] = useState(false)
+    const [organizationVisible, setOrganizationVisible] = useState(false)
     const [eventVisible, setEventVisible] = useState(false)
 
     return (
@@ -14,9 +14,9 @@ const Admin = () => {
             <Button
                 variant={"outline-dark"}
                 className="mt-4 p-2"
-                onClick={() => setSponsorVisible(true)}
+                onClick={() => setOrganizationVisible(true)}
             >
-                Добавить спонсора
+                Добавить НКО
             </Button>
             <Button
                 variant={"outline-dark"}
@@ -34,7 +34,7 @@ const Admin = () => {
             </Button>
             <CreateCategory show={categoryVisible} onHide={() => setCategoryVisible(false)}/>
             <CreateEvent show={eventVisible} onHide={() => setEventVisible(false)}/>
-            <CreateSponsor show={sponsorVisible} onHide={() => setSponsorVisible(false)}/>
+            <CreateOrganization show={organizationVisible} onHide={() => setOrganizationVisible(false)}/>
         </Container>
     );
 };

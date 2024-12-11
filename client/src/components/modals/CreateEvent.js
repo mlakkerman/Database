@@ -3,10 +3,12 @@ import Modal from "react-bootstrap/Modal";
 import Alert from "react-bootstrap/Alert";
 import { Button, Dropdown, Form, Row, Col } from "react-bootstrap";
 import { Context } from "../../index";
-import { createEvent, fetchCategories, fetchEvents, fetchSponsors } from "../../http/eventAPI";
+import { createEvent, fetchCategories, fetchOrganizations } from "../../http/eventAPI";
 import { observer } from "mobx-react-lite";
 
+
 const CreateEvent = observer(({ show, onHide }) => {
+    
     const { event } = useContext(Context)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -16,7 +18,7 @@ const CreateEvent = observer(({ show, onHide }) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        fetchSponsors().then(data => event.setSponsors(data))
+        fetchOrganizations().then(data => event.setOrganizations(data))
         fetchCategories().then(data => event.setCategories(data))
     }, [])
 
@@ -35,6 +37,7 @@ const CreateEvent = observer(({ show, onHide }) => {
     }
 
     const addEvent = () => {
+        
         const chosenDate = new Date(date);
         const presentDate = new Date();
 
@@ -47,10 +50,13 @@ const CreateEvent = observer(({ show, onHide }) => {
         formData.append('description', description)
         formData.append('img', file)
         formData.append('date', date)
+        formData.append('organizationId', event.selectedOrganization.id)
         formData.append('categoryId', event.selectedCategory.id)
-        formData.append('sponsorId', event.selectedSponsor.id)
         formData.append('info', JSON.stringify(info))
-        createEvent(formData).then(data => onHide())
+        createEvent(formData).then(data => {
+        onHide();
+        event.resetSelectedEntities();
+    });
     }
 
     return (
@@ -67,14 +73,14 @@ const CreateEvent = observer(({ show, onHide }) => {
             <Modal.Body>
                 <Form>
                     <Dropdown className="mt-2 mb-2">
-                        <Dropdown.Toggle>{event.selectedSponsor.name || "Выберите спонсора"}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{event.selectedOrganization.name || "Выберите организатора"}</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {event.sponsors.map(sponsor =>
+                            {event.organizations.map(organization =>
                                 <Dropdown.Item
-                                    onClick={() => event.setSelectedSponsor(sponsor)}
-                                    key={sponsor.id}
+                                    onClick={() => event.setSelectedOrganization(organization)}
+                                    key={organization.id}
                                 >
-                                    {sponsor.name}
+                                    {organization.name}
                                 </Dropdown.Item>
                             )}
                         </Dropdown.Menu>

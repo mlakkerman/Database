@@ -1,52 +1,62 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
-import bigStar from '../assets/bigStar.png'
-import {useParams} from 'react-router-dom'
-import {fetchOneEvent
-} from "../http/eventAPI";
+import React, { useEffect, useState, useContext } from 'react';
+import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
+import { useParams } from 'react-router-dom'
+import { fetchOneEvent, fetchOrganizations, fetchCategories, registerToEvent, checkRegistration } from "../http/eventAPI";
+import { Context } from "../index";
 
 const EventPage = () => {
-    const [event, setEvent] = useState({info: []})
-    const {id} = useParams()
+    const { user } = useContext(Context);
+    const [event, setEvent] = useState({ info: [] })
+    const [organization, setOrganization] = useState({})
+    const [category, setCategory] = useState({})
+    const [registered, setRegistered] = useState(false)
+    const { id } = useParams()
     useEffect(() => {
-        fetchOneEvent
-        (id).then(data => setEvent(data))
+        fetchOneEvent(id).then(data => {
+            setEvent(data)
+            fetchOrganizations().then(orgs => {
+                const org = orgs.find(o => o.id === data.organizationId)
+                setOrganization(org)
+            })
+            fetchCategories().then(cats => {
+                const cat = cats.find(c => c.id === data.categoryId)
+                setCategory(cat)
+            })
+            checkRegistration(id, user.user.id).then(res => setRegistered(res))
+        })
     }, [])
-
+    const handleButtonClick = () => {
+        registerToEvent(id, user.user.id).then(_ => {
+            alert("Вы успешно зарегистрировались на мероприятие!")
+            setRegistered(true)
+        }).catch(e => console.error(e));
+    }
     return (
         <Container className="mt-3">
             <Row>
-                <Col md={4}>
-                    <Image width={300} height={300} src={process.env.REACT_APP_API_URL + event.img}/>
+                <Col md={5}>
+                    <Image width={350} height={350} src={process.env.REACT_APP_API_URL + event.img} />
                 </Col>
-                <Col md={4}>
-                    <Row className="d-flex flex-column align-items-center">
+                <Col md={7}>
+                    <Row className="d-flex flex-column">
                         <h2>{event.name}</h2>
-                        <div
-                            className="d-flex align-items-center justify-content-center"
-                            style={{background: `url(${bigStar}) no-repeat center center`, width:240, height: 240, backgroundSize: 'cover', fontSize:64}}
-                        >
-                            {event.rating}
-                        </div>
+                        <h4>Категория: {category.name}</h4>
+                        <h4>НКО, проводящее мероприятие: {organization.name}</h4>
+                        <h4>Дата проведения: {new Date(event.date).toLocaleString()}</h4>
+                        <h4>Адрес проведения: {event.address}</h4>
                     </Row>
-                </Col>
-                <Col md={4}>
-                    <Card
-                        className="d-flex flex-column align-items-center justify-content-around"
-                        style={{width: 300, height: 300, fontSize: 32, border: '5px solid lightgray'}}
-                    >
-                        <h3>От: {event.price} руб.</h3>
-                        <Button variant={"outline-dark"}>Добавить в корзину</Button>
-                    </Card>
                 </Col>
             </Row>
-            <Row className="d-flex flex-column m-3">
-                <h1>Характеристики</h1>
-                {event.info.map((info, index) =>
-                    <Row key={info.id} style={{background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
-                        {info.title}: {info.description}
-                    </Row>
-                )}
+            <Row>
+                <Col className="mt-3">
+                    <Card className="p-3">
+                        <h3>Описание мероприятия:</h3>
+                        {event.description}
+                    </Card>
+                    <div className="d-flex justify-content-center">
+                        {user.user.role === 'USER' ? <Button className="mt-3 pl-3 pr-3" variant={"outline-dark"} onClick={handleButtonClick}>{registered ? "Вы уже зарегистрированы на это мероприятие" : "Я пойду!"}</Button> : null}
+                    </div>
+                </Col>
             </Row>
         </Container>
     );
