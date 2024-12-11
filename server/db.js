@@ -1,13 +1,16 @@
-const {Sequelize} = require('sequelize')
+const { Sequelize } = require('sequelize');
 
-module.exports = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
+// Настройка подключения к базе данных с использованием переменных окружения
+const sequelize = new Sequelize(
+    process.env.DB_NAME,      // Имя базы данных
+    process.env.DB_USER,      // Пользователь базы данных
+    process.env.DB_PASSWORD,  // Пароль
     {
         dialect: 'postgres',
-        logging: console.log,
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT
+        host: process.env.DB_HOST || 'localhost',  // Адрес базы данных (можно использовать 'localhost' или имя контейнера)
+        port: process.env.DB_PORT || 5432,          // Порт подключения
+        logging: console.log,                       // Логирование SQL запросов
     }
-)
+);
+
+module.exports = sequelize;
