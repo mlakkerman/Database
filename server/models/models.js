@@ -31,7 +31,7 @@ const Review = sequelize.define('review', {
     description: { type: DataTypes.STRING, allowNull: false },
 })
 
-const Sponsors = sequelize.define('sponsors', {
+const Organizations = sequelize.define('organizations', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
     logo: { type: DataTypes.STRING, allowNull: false },
@@ -51,7 +51,7 @@ const Categories = sequelize.define('categories', {
     name: { type: DataTypes.STRING, allowNull: false },
 })
 
-const Favorites = sequelize.define('favorites', {
+const Registrations = sequelize.define('registrations', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 })
 
@@ -70,8 +70,11 @@ Review.belongsTo(Events);
 Address.hasOne(Events);
 Events.belongsTo(Address);
 
-Sponsors.hasMany(Events);
-Events.belongsTo(Sponsors);
+Organizations.hasMany(Events);
+Events.belongsTo(Organizations);
+
+Organizations.hasOne(User); //
+User.belongsTo(Organizations); //
 
 Categories.hasOne(Events);
 Events.belongsTo(Categories);
@@ -82,18 +85,18 @@ EventInfo.belongsTo(Events)
 Speakers.hasOne(Events);
 Events.belongsTo(Speakers);
 
-Events.belongsToMany(User, { through: Favorites });
-User.belongsToMany(Events, { through: Favorites });
+Events.belongsToMany(User, { through: Registrations });
+User.belongsToMany(Events, { through: Registrations });
 
 module.exports = {
     User,
     Events,
     Address,
     Review,
-    Sponsors,
+    Organizations,
     Speakers,
     Categories,
-    Favorites,
+    Registrations,
     EventInfo
 }
 

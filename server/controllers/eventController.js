@@ -6,11 +6,11 @@ const ApiError = require('../error/ApiError');
 class EventController {
     async create(req, res, next) {
         try {
-            let { title, description, info, date, categoryId, addressId, sponsorId, speakerId } = req.body
+            let { title, description, info, date, categoryId, addressId, organizationId, speakerId } = req.body
             const { img } = req.files
             let fileName = uuid.v4() + ".jpg"
             img.mv(path.resolve(__dirname, '..', 'static', fileName))
-            const event = await Events.create({ title, description, date, categoryId, addressId, sponsorId, speakerId, img: fileName });
+            const event = await Events.create({ title, description, date, categoryId, addressId, organizationId, speakerId, img: fileName });
 
             if (info) {
                 info = JSON.parse(info)
@@ -30,14 +30,14 @@ class EventController {
     }
 
     async getAll(req, res) {
-        let { categoryId, addressId, sponsorId, speakerId, limit, page } = req.query
+        let { categoryId, addressId, organizationId, speakerId, limit, page } = req.query
         page = page || 1
         limit = limit || 8
         let offset = page * limit - limit
         let whereClause = {};
         if (categoryId) whereClause.categoryId = categoryId;
         if (addressId) whereClause.addressId = addressId;
-        if (sponsorId) whereClause.sponsorId = sponsorId;
+        if (organizationId) whereClause.organizationId = organizationId;
         if (speakerId) whereClause.speakerId = speakerId;
     
         let events = await Events.findAndCountAll({

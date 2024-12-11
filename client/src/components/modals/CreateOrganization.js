@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import Modal from "react-bootstrap/Modal";
 import {Form, Button} from "react-bootstrap";
-import {createSponsor} from "../../http/eventAPI";
+import {createOrganization} from "../../http/eventAPI";
 
-const CreateSponsor = ({show, onHide}) => {
+const CreateOrganization = ({show, onHide}) => {
     const [name, setName] = useState('')
     const [logo, setLogo] = useState(null)
     const [url, setUrl] = useState('')
-    const addSponsor = () => {
+    const addOrganization = () => {
         const formData = new FormData()
         formData.append('name', name)
         formData.append('logo', logo)
         formData.append('websiteUrl', url)
-        createSponsor(formData).then(data => onHide())
+        createOrganization(formData).then(data => onHide())
     }
     const selectLogo = e => {
         setLogo(e.target.files[0])
@@ -25,7 +25,7 @@ const CreateSponsor = ({show, onHide}) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Добавить тип
+                    Добавить организатора
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -50,10 +50,10 @@ const CreateSponsor = ({show, onHide}) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-danger" onClick={onHide}>Закрыть</Button>
-                <Button variant="outline-success" onClick={addSponsor}>Добавить</Button>
+                <Button variant="outline-success" onClick={addOrganization}>Добавить</Button>
             </Modal.Footer>
         </Modal>
     );
 };
 
-export default CreateSponsor;
+export default CreateOrganization;
